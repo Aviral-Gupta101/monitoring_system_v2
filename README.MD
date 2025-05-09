@@ -48,7 +48,7 @@ A full-stack monitoring application that allows you to create and manage health 
 ### 1. Clone the repository
 
 ```bash
-git https://github.com/Aviral-Gupta101/monitoring_system_v2.git
+git clone https://github.com/Aviral-Gupta101/monitoring_system_v2.git
 cd monitoring-system
 ```
 
