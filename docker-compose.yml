@@ -1,0 +1,46 @@
+services:
+  db:
+    image: arm64v8/mysql:latest
+#    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: toor
+      MYSQL_DATABASE: monitoring_system
+    networks:
+      - monitoring_net
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  backend:
+    build: backend
+    image: monitoring_system_backend:latest
+#    restart: always
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/monitoring_system
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: toor
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      socketio_hostname: 0.0.0.0
+    ports:
+      - "8080:8080"
+      - "9091:9091"
+    networks:
+      - monitoring_net
+
+  frontend:
+    build: frontend
+    image: frontend:latest
+    depends_on:
+      - backend
+    ports:
+      - "5173:5173"
+    networks:
+      - monitoring_net
+
+volumes:
+  mysql-data:
+
+networks:
+  monitoring_net:
+    driver: bridge
